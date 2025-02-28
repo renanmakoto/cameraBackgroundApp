@@ -1,5 +1,5 @@
 {
-  "name": "CameraBackgroundApp",
+  "name": "cameraBackgroundApp",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -11,8 +11,7 @@
   },
   "dependencies": {
     "react": "19.0.0",
-    "react-native": "0.78.0",
-    "react-native-camera": "^4.2.1"
+    "react-native": "0.78.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

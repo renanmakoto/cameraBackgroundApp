@@ -105,12 +105,6 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
-    flavorDimensions "default"
-        productFlavors {
-            general {
-                dimension "default"
-            }
-        }
 }
 
 dependencies {
@@ -122,5 +116,4 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-    implementation(':react-native-camera')
 }
