@@ -12,7 +12,7 @@ import { Camera, useCameraDevices } from 'react-native-vision-camera';
 function App(): React.JSX.Element {
   const [hasPermission, setHasPermission] = useState(false);
   const devices = useCameraDevices();
-  const device = devices?.back; // Correct way to access the back camera
+  const device = devices?.back;
 
   useEffect(() => {
     const requestPermissions = async () => {
