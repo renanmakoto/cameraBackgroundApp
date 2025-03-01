@@ -23,7 +23,7 @@ function App(): React.JSX.Element {
         setHasPermission(granted === PermissionsAndroid.RESULTS.GRANTED);
       } else {
         const permission = await Camera.requestCameraPermission();
-        setHasPermission(permission === 'granted'); // Corrected comparison
+        setHasPermission(permission === 'granted');
       }
     };
 
