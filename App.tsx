@@ -9,8 +9,6 @@ import {
   AppState,
 } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
-import { useCameraPermission } from 'react-native-vision-camera';
-import { captureScreen } from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
 
 function App(): React.JSX.Element {
@@ -61,13 +59,13 @@ function App(): React.JSX.Element {
     if (cameraRef.current) {
       try {
         setIsRecording(true);
-        const videoPath = `${RNFS.ExternalStorageDirectoryPath}/Movies/video_${Date.now()}.mp4`;
-
         await cameraRef.current.startRecording({
           flash: 'off',
-          filePath: videoPath, 
-          onRecordingFinished: video => {
-            console.log('Saved video:', video);
+          onRecordingFinished: async (video) => {
+            console.log('Saved video at:', video.path);
+            const newPath = `${RNFS.ExternalStorageDirectoryPath}/Movies/video_${Date.now()}.mp4`;
+            await RNFS.moveFile(video.path, newPath);
+            console.log('Video moved to:', newPath);
             setIsRecording(false);
           },
           onRecordingError: error => {

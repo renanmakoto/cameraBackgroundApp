@@ -12,6 +12,8 @@
   "dependencies": {
     "react": "19.0.0",
     "react-native": "0.78.0",
+    "react-native-fs": "^2.20.0",
+    "react-native-view-shot": "^4.0.3",
     "react-native-vision-camera": "^4.6.4"
   },
   "devDependencies": {
