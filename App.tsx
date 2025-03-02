@@ -8,16 +8,17 @@ import {
   TouchableOpacity,
   AppState,
 } from 'react-native';
-import { Camera, useCameraDevices } from 'react-native-vision-camera';
+import { Camera, useCameraDevices, CameraPermissionRequestResult } from 'react-native-vision-camera';
 import RNFS from 'react-native-fs';
 import { NativeModules } from 'react-native';
 
 const { RNFetchBlob } = NativeModules;
+
 const refreshGallery = (filePath: string) => {
   RNFetchBlob.fs
     .scanFile([{ path: filePath, mime: 'video/mp4' }])
     .then(() => console.log('Gallery refreshed:', filePath))
-    .catch(err => console.error('Error refreshing gallery:', err));
+    .catch((err: unknown) => console.error('Error refreshing gallery:', err));
 };
 
 function App(): React.JSX.Element {
@@ -42,8 +43,8 @@ function App(): React.JSX.Element {
         setHasPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED);
         setStoragePermission(storageGranted === PermissionsAndroid.RESULTS.GRANTED);
       } else {
-        const permission = await Camera.requestCameraPermission();
-        setHasPermission(permission === 'authorized');
+        const permission: CameraPermissionRequestResult = await Camera.requestCameraPermission();
+        setHasPermission(permission === 'granted');
       }
     };
 
@@ -53,8 +54,8 @@ function App(): React.JSX.Element {
   useEffect(() => {
     const subscription = AppState.addEventListener('change', state => {
       if (state === 'active') {
-        Camera.requestCameraPermission().then(permission => {
-          setHasPermission(permission === 'authorized');
+        Camera.requestCameraPermission().then((permission: CameraPermissionRequestResult) => {
+          setHasPermission(permission === 'granted');
         });
       }
     });
