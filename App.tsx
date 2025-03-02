@@ -10,6 +10,15 @@ import {
 } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import RNFS from 'react-native-fs';
+import { NativeModules } from 'react-native';
+
+const { RNFetchBlob } = NativeModules;
+const refreshGallery = (filePath: string) => {
+  RNFetchBlob.fs
+    .scanFile([{ path: filePath, mime: 'video/mp4' }])
+    .then(() => console.log('Gallery refreshed:', filePath))
+    .catch(err => console.error('Error refreshing gallery:', err));
+};
 
 function App(): React.JSX.Element {
   const [hasPermission, setHasPermission] = useState(false);
@@ -29,21 +38,23 @@ function App(): React.JSX.Element {
         const storageGranted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
         );
+
         setHasPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED);
         setStoragePermission(storageGranted === PermissionsAndroid.RESULTS.GRANTED);
       } else {
         const permission = await Camera.requestCameraPermission();
-        setHasPermission(permission === 'granted');
+        setHasPermission(permission === 'authorized');
       }
     };
+
     requestPermissions();
   }, []);
 
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', (state) => {
+    const subscription = AppState.addEventListener('change', state => {
       if (state === 'active') {
-        Camera.requestCameraPermission().then((permission) => {
-          setHasPermission(permission === 'granted');
+        Camera.requestCameraPermission().then(permission => {
+          setHasPermission(permission === 'authorized');
         });
       }
     });
@@ -61,11 +72,15 @@ function App(): React.JSX.Element {
         setIsRecording(true);
         await cameraRef.current.startRecording({
           flash: 'off',
-          onRecordingFinished: async (video) => {
+          onRecordingFinished: async video => {
             console.log('Saved video at:', video.path);
-            const newPath = `${RNFS.ExternalStorageDirectoryPath}/Movies/video_${Date.now()}.mp4`;
+
+            const newPath = `${RNFS.ExternalStorageDirectoryPath}/DCIM/Camera/video_${Date.now()}.mp4`;
             await RNFS.moveFile(video.path, newPath);
             console.log('Video moved to:', newPath);
+
+            refreshGallery(newPath);
+
             setIsRecording(false);
           },
           onRecordingError: error => {
@@ -91,24 +106,16 @@ function App(): React.JSX.Element {
 
   return (
     <View style={styles.container}>
-      <Camera
-        ref={cameraRef}
-        style={styles.camera}
-        device={device}
-        isActive={true}
-        video={true}
-      />
+      <Camera ref={cameraRef} style={styles.camera} device={device} isActive={true} video={true} />
       <View style={styles.controls}>
-        <TouchableOpacity onPress={toggleCamera} style={[styles.button, styles.flipButton]}>
+        <TouchableOpacity onPress={toggleCamera} style={styles.flipButton}>
           <Text style={styles.buttonText}>Flip Camera</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={isRecording ? stopRecording : startRecording}
-          style={[styles.button, isRecording ? styles.stopButton : styles.startButton]}
+          style={isRecording ? styles.stopButton : styles.startButton}
         >
-          <Text style={styles.buttonText}>
-            {isRecording ? 'Stop Recording' : 'Start Recording'}
-          </Text>
+          <Text style={styles.buttonText}>{isRecording ? 'Stop Recording' : 'Start Recording'}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -128,18 +135,20 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'black',
   },
-  button: {
+  flipButton: {
     padding: 10,
+    backgroundColor: 'blue',
     borderRadius: 5,
   },
-  flipButton: {
-    backgroundColor: 'blue',
-  },
   startButton: {
+    padding: 10,
     backgroundColor: 'green',
+    borderRadius: 5,
   },
   stopButton: {
+    padding: 10,
     backgroundColor: 'red',
+    borderRadius: 5,
   },
   buttonText: {
     color: 'white',
