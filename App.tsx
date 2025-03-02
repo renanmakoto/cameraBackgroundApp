@@ -39,6 +39,9 @@ function App(): React.JSX.Element {
         const storageGranted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
         );
+        const audioGranted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
+        );
 
         setHasPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED);
         setStoragePermission(storageGranted === PermissionsAndroid.RESULTS.GRANTED);
@@ -73,6 +76,7 @@ function App(): React.JSX.Element {
         setIsRecording(true);
         await cameraRef.current.startRecording({
           flash: 'off',
+          audio: true,
           onRecordingFinished: async video => {
             console.log('Saved video at:', video.path);
 
@@ -107,7 +111,14 @@ function App(): React.JSX.Element {
 
   return (
     <View style={styles.container}>
-      <Camera ref={cameraRef} style={styles.camera} device={device} isActive={true} video={true} />
+      <Camera
+        ref={cameraRef}
+        style={styles.camera}
+        device={device}
+        isActive={true}
+        video={true}
+        audio={true}
+      />
       <View style={styles.controls}>
         <TouchableOpacity onPress={toggleCamera} style={styles.flipButton}>
           <Text style={styles.buttonText}>Flip Camera</Text>

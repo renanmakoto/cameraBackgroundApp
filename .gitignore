@@ -112,3 +112,16 @@ __tests__/coverage/
 
 # macOS files
 .DS_Store
+
+# Folders to ignore
+tests/
+.bundle/
+.vscode/
+android/
+ios/
+node_modules/
+
+# Files to ignore
+.eslintrc.js
+.prettier.js
+.watchmanconfig
