@@ -102,7 +102,7 @@ function App(): React.JSX.Element {
 
   const stopRecording = async () => {
     if (cameraRef.current) {
-      await cameraRef.current.stopRecording();
+      await cameraRef.current.stopRecording()
       setIsRecording(false)
     }
   }
