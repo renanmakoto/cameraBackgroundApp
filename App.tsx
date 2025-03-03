@@ -105,7 +105,7 @@ function App(): React.JSX.Element {
       await cameraRef.current.stopRecording();
       setIsRecording(false);
     }
-  };
+  }
 
   if (!device) return <Text>No Camera Found</Text>;
 
