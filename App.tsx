@@ -89,8 +89,8 @@ function App(): React.JSX.Element {
             setIsRecording(false);
           },
           onRecordingError: error => {
-            console.error('Recording error:', error);
-            setIsRecording(false);
+            console.error('Recording error:', error)
+            setIsRecording(false)
           },
         })
       } catch (error) {
