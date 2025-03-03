@@ -131,7 +131,7 @@ function App(): React.JSX.Element {
         </TouchableOpacity>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
