@@ -166,6 +166,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-});
+})
 
-export default App;
+export default App
