@@ -95,7 +95,7 @@ function App(): React.JSX.Element {
         });
       } catch (error) {
         console.error('Error starting recording:', error);
-        setIsRecording(false);
+        setIsRecording(false)
       }
     }
   }
