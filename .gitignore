@@ -114,7 +114,7 @@ __tests__/coverage/
 .DS_Store
 
 # Folders to ignore
-tests/
+__tests__
 .bundle/
 .vscode/
 android/
