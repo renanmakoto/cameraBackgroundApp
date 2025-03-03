@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react'
 import {
   View,
   StyleSheet,
@@ -7,7 +7,7 @@ import {
   Text,
   TouchableOpacity,
   AppState,
-} from 'react-native';
+} from 'react-native'
 import { Camera, useCameraDevices, CameraPermissionRequestResult } from 'react-native-vision-camera';
 import RNFS from 'react-native-fs';
 import { NativeModules } from 'react-native';
