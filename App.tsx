@@ -84,9 +84,9 @@ function App(): React.JSX.Element {
             await RNFS.moveFile(video.path, newPath);
             console.log('Video moved to:', newPath);
 
-            refreshGallery(newPath);
+            refreshGallery(newPath)
 
-            setIsRecording(false);
+            setIsRecording(false)
           },
           onRecordingError: error => {
             console.error('Recording error:', error)
