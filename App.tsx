@@ -107,7 +107,7 @@ function App(): React.JSX.Element {
     }
   }
 
-  if (!device) return <Text>No Camera Found</Text>;
+  if (!device) return <Text>No Camera Found</Text>
 
   return (
     <View style={styles.container}>
