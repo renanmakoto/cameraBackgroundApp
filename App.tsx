@@ -25,10 +25,10 @@ function App(): React.JSX.Element {
   const [hasPermission, setHasPermission] = useState(false);
   const [storagePermission, setStoragePermission] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('back');
-  const cameraRef = useRef<Camera>(null);
-  const devices = useCameraDevices();
-  const device = devices.find(d => d.position === cameraPosition);
+  const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('back')
+  const cameraRef = useRef<Camera>(null)
+  const devices = useCameraDevices()
+  const device = devices.find(d => d.position === cameraPosition)
 
   useEffect(() => {
     const requestPermissions = async () => {
