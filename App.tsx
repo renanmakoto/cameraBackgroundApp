@@ -35,16 +35,16 @@ function App(): React.JSX.Element {
       if (Platform.OS === 'android') {
         const cameraGranted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.CAMERA
-        );
+        )
         const storageGranted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-        );
+        )
         const audioGranted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
-        );
+        )
 
-        setHasPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED);
-        setStoragePermission(storageGranted === PermissionsAndroid.RESULTS.GRANTED);
+        setHasPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED)
+        setStoragePermission(storageGranted === PermissionsAndroid.RESULTS.GRANTED)
       } else {
         const permission: CameraPermissionRequestResult = await Camera.requestCameraPermission()
         setHasPermission(permission === 'granted')
