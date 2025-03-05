@@ -64,11 +64,11 @@ function App(): React.JSX.Element {
     });
 
     return () => subscription.remove();
-  }, []);
+  }, [])
 
   const toggleCamera = () => {
-    setCameraPosition(prev => (prev === 'back' ? 'front' : 'back'));
-  };
+    setCameraPosition(prev => (prev === 'back' ? 'front' : 'back'))
+  }
 
   const startRecording = async () => {
     if (cameraRef.current) {
