@@ -46,24 +46,24 @@ function App(): React.JSX.Element {
         setHasPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED);
         setStoragePermission(storageGranted === PermissionsAndroid.RESULTS.GRANTED);
       } else {
-        const permission: CameraPermissionRequestResult = await Camera.requestCameraPermission();
-        setHasPermission(permission === 'granted');
+        const permission: CameraPermissionRequestResult = await Camera.requestCameraPermission()
+        setHasPermission(permission === 'granted')
       }
-    };
+    }
 
-    requestPermissions();
-  }, []);
+    requestPermissions()
+  }, [])
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', state => {
       if (state === 'active') {
         Camera.requestCameraPermission().then((permission: CameraPermissionRequestResult) => {
-          setHasPermission(permission === 'granted');
-        });
+          setHasPermission(permission === 'granted')
+        })
       }
-    });
+    })
 
-    return () => subscription.remove();
+    return () => subscription.remove()
   }, [])
 
   const toggleCamera = () => {
