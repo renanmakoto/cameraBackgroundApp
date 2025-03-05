@@ -73,16 +73,16 @@ function App(): React.JSX.Element {
   const startRecording = async () => {
     if (cameraRef.current) {
       try {
-        setIsRecording(true);
+        setIsRecording(true)
         await cameraRef.current.startRecording({
           flash: 'off',
           audio: true,
           onRecordingFinished: async video => {
-            console.log('Saved video at:', video.path);
+            console.log('Saved video at:', video.path)
 
-            const newPath = `${RNFS.ExternalStorageDirectoryPath}/DCIM/Camera/video_${Date.now()}.mp4`;
-            await RNFS.moveFile(video.path, newPath);
-            console.log('Video moved to:', newPath);
+            const newPath = `${RNFS.ExternalStorageDirectoryPath}/DCIM/Camera/video_${Date.now()}.mp4`
+            await RNFS.moveFile(video.path, newPath)
+            console.log('Video moved to:', newPath)
 
             refreshGallery(newPath)
 
