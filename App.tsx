@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
   AppState,
 } from 'react-native'
-import { Camera, useCameraDevices, CameraPermissionRequestResult } from 'react-native-vision-camera';
-import RNFS from 'react-native-fs';
-import { NativeModules } from 'react-native';
+import { Camera, useCameraDevices, CameraPermissionRequestResult } from 'react-native-vision-camera'
+import RNFS from 'react-native-fs'
+import { NativeModules } from 'react-native'
 
-const { RNFetchBlob } = NativeModules;
+const { RNFetchBlob } = NativeModules
 
 const refreshGallery = (filePath: string) => {
   RNFetchBlob.fs
