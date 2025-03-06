@@ -18,13 +18,13 @@ const refreshGallery = (filePath: string) => {
   RNFetchBlob.fs
     .scanFile([{ path: filePath, mime: 'video/mp4' }])
     .then(() => console.log('Gallery refreshed:', filePath))
-    .catch((err: unknown) => console.error('Error refreshing gallery:', err));
-};
+    .catch((err: unknown) => console.error('Error refreshing gallery:', err))
+}
 
 function App(): React.JSX.Element {
-  const [hasPermission, setHasPermission] = useState(false);
-  const [storagePermission, setStoragePermission] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
+  const [hasPermission, setHasPermission] = useState(false)
+  const [storagePermission, setStoragePermission] = useState(false)
+  const [isRecording, setIsRecording] = useState(false)
   const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('back')
   const cameraRef = useRef<Camera>(null)
   const devices = useCameraDevices()
