@@ -21,7 +21,7 @@ const refreshGallery = (filePath: string) => {
     .catch((err: unknown) => console.error('Error refreshing gallery:', err))
 }
 
-function App(): React.JSX.Element {
+export default function App(): React.JSX.Element {
   const [hasPermission, setHasPermission] = useState(false)
   const [storagePermission, setStoragePermission] = useState(false)
   const [isRecording, setIsRecording] = useState(false)
@@ -167,5 +167,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 })
-
-export default App
