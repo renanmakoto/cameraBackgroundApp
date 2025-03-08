@@ -76,7 +76,6 @@ export default function App(): React.JSX.Element {
         setIsRecording(true)
         await cameraRef.current.startRecording({
           flash: 'off',
-          audio: true,
           onRecordingFinished: async video => {
             console.log('Saved video at:', video.path)
 
@@ -117,7 +116,7 @@ export default function App(): React.JSX.Element {
         device={device}
         isActive={true}
         video={true}
-        audio={true}
+        audio={true} // <== Move audio here
       />
       <View style={styles.controls}>
         <TouchableOpacity onPress={toggleCamera} style={styles.flipButton}>
