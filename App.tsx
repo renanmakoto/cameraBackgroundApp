@@ -116,7 +116,7 @@ export default function App(): React.JSX.Element {
         device={device}
         isActive={true}
         video={true}
-        audio={true} // <== Move audio here
+        audio={true}
       />
       <View style={styles.controls}>
         <TouchableOpacity onPress={toggleCamera} style={styles.flipButton}>
@@ -166,3 +166,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 })
+
