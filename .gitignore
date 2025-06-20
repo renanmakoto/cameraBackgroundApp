@@ -1,10 +1,59 @@
-# OSX
-#
+# macOS
 .DS_Store
 
-# Xcode
-#
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+logs
+
+# Editor directories and files
+.vscode/
+.idea/
+*.iml
+
+# OS metadata
+*.swp
+*.swo
+*.bak
+
+# React Native
+*.jsbundle
+*.keystore
+.expo/
+.bundle/
+.haul/
+dist/
+__tests__/
+__tests__/**
+
+# TypeScript
+*.tsbuildinfo
+
+# Metro bundler cache
+.metro-health-check*
+
+# Build directories
 build/
+android/.gradle/
+android/.idea/
+android/.cxx/
+android/app/build/
+ios/Pods/
+ios/build/
+ios/.xcworkspace/
+ios/*.xcodeproj/
+
+# Android local configuration
+android/local.properties
+*.apk
+
+# iOS
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -13,115 +62,46 @@ build/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-xcuserdata
-*.xccheckout
-*.moved-aside
-DerivedData
+xcuserdata/
+*.xcuserstate
+DerivedData/
 *.hmap
 *.ipa
-*.xcuserstate
-**/.xcode.env.local
 
-# Android/IntelliJ
-#
-build/
-.idea
-.gradle
-local.properties
-*.iml
-*.hprof
-.cxx/
-*.keystore
-!debug.keystore
-.kotlin/
-
-# node.js
-#
-node_modules/
-npm-debug.log
-yarn-debug.log
-yarn-error.log
-
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
-# screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/
-
+# Fastlane
 **/fastlane/report.xml
 **/fastlane/Preview.html
 **/fastlane/screenshots
 **/fastlane/test_output
 
-# Bundle artifact
-*.jsbundle
+# Gradle
+.gradle/
+android/gradlew
+android/gradlew.bat
+android/gradle-wrapper.jar
+android/gradle-wrapper.properties
+android/gradle/
 
-# Ruby / CocoaPods
-**/Pods/
-/vendor/bundle/
-
-# Temporary files created by Metro to check the health of the file watcher
-.metro-health-check*
-
-# testing
-/coverage
-
-# Yarn
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-pnpm-debug.log*
-lerna-debug.log*
-.wercker
-
-# React Native build files
-android/app/build/
-android/.gradle/
-android/.idea/
-android/local.properties
-android/.cxx/
-ios/Pods/
-ios/build/
-ios/.xcworkspace/
-ios/*.xcodeproj/
-
-# Metro bundler cache
-.expo/
-.bundle/
-.haul/
-dist/
-
-# Testing
+# Cache & IDE
 coverage/
-__tests__/coverage/
+.env
+.env.*
+npm-debug.log*
+yarn-error.log*
+*.tmp
+*.temp
 
-# Editor settings
-.vscode/
-.idea/
-*.iml
+# Binary and build artifacts
+*.class
+*.jar
+*.bin
+*.tab
+*.tab.*
+*.values.*
+*.keystream*
+*.apk
 
-# macOS files
-.DS_Store
-
-# Folders to ignore
-__tests__
-.bundle/
-.vscode/
-android/
-ios/
-node_modules/
-
-# Files to ignore
+# Misc
+.watchmanconfig
 .eslintrc.js
 .prettier.js
-.watchmanconfig

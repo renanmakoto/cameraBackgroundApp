@@ -1,0 +1,1 @@
+/home/user/Desktop/cameraBackgroundApp/android/app/build/intermediates/cxx/Debug/1i4m161m/obj/arm64-v8a

@@ -1,0 +1,2 @@
+/home/user/Desktop/cameraBackgroundApp/node_modules/react-native-view-shot/android/build/generated/source/codegen/jni/CMakeLists.txt
+/home/user/Desktop/cameraBackgroundApp/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt
