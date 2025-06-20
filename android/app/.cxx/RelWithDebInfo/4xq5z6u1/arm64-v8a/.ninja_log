@@ -1,0 +1,14 @@
+# ninja log v5
+1	5	0	/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/RelWithDebInfo/4xq5z6u1/arm64-v8a/CMakeFiles/cmake.verify_globs	5710e65e4f70f501
+2	3591	1750430241601934065	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/States.cpp.o	8de927bad395b0ca
+1	3842	1750430241854938165	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/EventEmitters.cpp.o	96113f1cdbf065f8
+1	4480	1750430242486948405	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/Props.cpp.o	153d75d127c133c7
+2	4729	1750430242740952520	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/ShadowNodes.cpp.o	b95f5771ad0a05d8
+1	4870	1750430242880954788	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/ComponentDescriptors.cpp.o	74786ce2dc9562b2
+2	4977	1750430242991956587	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/rnviewshotJSI-generated.cpp.o	49b9ca561f5dcd0e
+0	5021	1750430243029957202	CMakeFiles/appmodules.dir/home/user/Desktop/cameraBackgroundApp/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	308d0ea8c6c63b18
+3	5264	1750430243274961171	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/rnviewshot-generated.cpp.o	704d687eca0f2bff
+1	5569	1750430243579966111	CMakeFiles/appmodules.dir/OnLoad.cpp.o	d917b9e25cecf3c2
+5569	5606	1750430243640967099	/home/user/Desktop/cameraBackgroundApp/android/app/build/intermediates/cxx/RelWithDebInfo/4xq5z6u1/obj/arm64-v8a/libappmodules.so	3f914a2876a123ea
+1	4	0	/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/RelWithDebInfo/4xq5z6u1/arm64-v8a/CMakeFiles/cmake.verify_globs	5710e65e4f70f501
+0	4	0	clean	6f7710e0c0213ff3
