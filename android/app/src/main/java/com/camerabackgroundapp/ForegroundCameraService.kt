@@ -1,69 +1,77 @@
 package com.camerabackgroundapp
 
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.Service
 import android.content.Intent
-import android.os.*
+import android.os.Build
+import android.os.IBinder
+import android.os.PowerManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import android.hardware.camera2.CameraManager
-import android.content.Context
-import android.os.PowerManager
 
 class ForegroundCameraService : Service() {
 
-    private val CHANNEL_ID = "ForegroundCameraServiceChannel"
-    private var wakeLock: PowerManager.WakeLock? = null
+    private lateinit var wakeLock: PowerManager.WakeLock
+    private val CHANNEL_ID = "ForegroundCameraChannel"
 
     override fun onCreate() {
         super.onCreate()
-        acquireWakeLock()
         createNotificationChannel()
-        val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Camera Recording")
-            .setContentText("Recording in background...")
-            .setSmallIcon(android.R.drawable.ic_menu_camera)
-            .build()
-        startForeground(1, notification)
-
-        // You can initialize camera usage here or call a native module
-        Log.d("ForegroundCameraService", "Service started and foreground notification shown")
+        acquireWakeLock()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Start camera recording logic here (if needed directly)
+        val notification = createNotification("Camera is recording in background")
+        startForeground(1, notification)
+
+        // TODO: Start camera recording here using your recording logic
+
+        Log.d("ForegroundCameraService", "Foreground service started")
         return START_STICKY
     }
 
     override fun onDestroy() {
         super.onDestroy()
         releaseWakeLock()
+        Log.d("ForegroundCameraService", "Foreground service destroyed")
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
+    override fun onBind(intent: Intent?): IBinder? = null
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
                 CHANNEL_ID,
-                "Background Camera Service Channel",
-                NotificationManager.IMPORTANCE_DEFAULT
+                "Camera Background Service",
+                NotificationManager.IMPORTANCE_LOW
             )
             val manager = getSystemService(NotificationManager::class.java)
             manager?.createNotificationChannel(serviceChannel)
         }
     }
 
+    private fun createNotification(contentText: String): Notification {
+        return NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Camera Background App")
+            .setContentText(contentText)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .build()
+    }
+
     private fun acquireWakeLock() {
-        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "CameraApp::Wakelock")
-        wakeLock?.acquire(10*60*1000L /*10 minutes*/)
+        val powerManager = getSystemService(POWER_SERVICE) as PowerManager
+        wakeLock = powerManager.newWakeLock(
+            PowerManager.PARTIAL_WAKE_LOCK,
+            "CameraBackgroundApp::WakeLock"
+        )
+        wakeLock.acquire()
     }
 
     private fun releaseWakeLock() {
-        wakeLock?.let {
-            if (it.isHeld) it.release()
+        if (::wakeLock.isInitialized && wakeLock.isHeld) {
+            wakeLock.release()
         }
     }
 }
