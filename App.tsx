@@ -73,7 +73,6 @@ export default function App(): React.JSX.Element {
   const startRecording = async () => {
     if (cameraRef.current) {
       try {
-        // Start background service automatically
         CameraServiceModule.startService()
 
         setIsRecording(true)
