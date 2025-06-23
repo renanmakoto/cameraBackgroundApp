@@ -7,12 +7,12 @@ import {
   Text,
   TouchableOpacity,
   AppState,
+  NativeModules,
 } from 'react-native'
 import { Camera, useCameraDevices, CameraPermissionRequestResult } from 'react-native-vision-camera'
 import RNFS from 'react-native-fs'
-import { NativeModules } from 'react-native'
 
-const { RNFetchBlob } = NativeModules
+const { RNFetchBlob, CameraService } = NativeModules
 
 const refreshGallery = (filePath: string) => {
   RNFetchBlob.fs
@@ -45,6 +45,11 @@ export default function App(): React.JSX.Element {
 
         setHasPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED)
         setStoragePermission(storageGranted === PermissionsAndroid.RESULTS.GRANTED)
+
+        if (cameraGranted === PermissionsAndroid.RESULTS.GRANTED &&
+            audioGranted === PermissionsAndroid.RESULTS.GRANTED) {
+          CameraService.startService()
+        }
       } else {
         const permission: CameraPermissionRequestResult = await Camera.requestCameraPermission()
         setHasPermission(permission === 'granted')
@@ -128,6 +133,9 @@ export default function App(): React.JSX.Element {
         >
           <Text style={styles.buttonText}>{isRecording ? 'Stop Recording' : 'Start Recording'}</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => CameraService.startService()} style={styles.flipButton}>
+          <Text style={styles.buttonText}>Start BG Service</Text>
+        </TouchableOpacity>
       </View>
     </View>
   )
@@ -166,4 +174,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 })
-
