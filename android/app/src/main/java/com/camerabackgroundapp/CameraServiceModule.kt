@@ -6,17 +6,14 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 
 class CameraServiceModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
-    override fun getName(): String = "CameraService"
+
+    private val context = reactContext
+
+    override fun getName(): String = "CameraServiceModule"
 
     @ReactMethod
     fun startService() {
-        val intent = Intent(reactApplicationContext, ForegroundCameraService::class.java)
-        reactApplicationContext.startForegroundService(intent)
-    }
-
-    @ReactMethod
-    fun stopService() {
-        val intent = Intent(reactApplicationContext, ForegroundCameraService::class.java)
-        reactApplicationContext.stopService(intent)
+        val intent = Intent(context, ForegroundCameraService::class.java)
+        context.startForegroundService(intent)
     }
 }
