@@ -12,7 +12,7 @@ import {
 import { Camera, useCameraDevices, CameraPermissionRequestResult } from 'react-native-vision-camera'
 import RNFS from 'react-native-fs'
 
-const { RNFetchBlob, CameraService } = NativeModules
+const { RNFetchBlob, CameraServiceModule } = NativeModules
 
 const refreshGallery = (filePath: string) => {
   RNFetchBlob.fs
@@ -45,11 +45,6 @@ export default function App(): React.JSX.Element {
 
         setHasPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED)
         setStoragePermission(storageGranted === PermissionsAndroid.RESULTS.GRANTED)
-
-        if (cameraGranted === PermissionsAndroid.RESULTS.GRANTED &&
-            audioGranted === PermissionsAndroid.RESULTS.GRANTED) {
-          CameraService.startService()
-        }
       } else {
         const permission: CameraPermissionRequestResult = await Camera.requestCameraPermission()
         setHasPermission(permission === 'granted')
@@ -78,6 +73,9 @@ export default function App(): React.JSX.Element {
   const startRecording = async () => {
     if (cameraRef.current) {
       try {
+        // Start background service automatically
+        CameraServiceModule.startService()
+
         setIsRecording(true)
         await cameraRef.current.startRecording({
           flash: 'off',
@@ -132,9 +130,6 @@ export default function App(): React.JSX.Element {
           style={isRecording ? styles.stopButton : styles.startButton}
         >
           <Text style={styles.buttonText}>{isRecording ? 'Stop Recording' : 'Start Recording'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => CameraService.startService()} style={styles.flipButton}>
-          <Text style={styles.buttonText}>Start BG Service</Text>
         </TouchableOpacity>
       </View>
     </View>
