@@ -14,8 +14,7 @@ const { CameraService } = NativeModules;
 
 export default function App() {
   const camera = useRef<Camera>(null);
-  const devices = useCameraDevices();
-  const device = devices.back;
+  const { back: device } = useCameraDevices();
   const [hasPermission, setHasPermission] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isCameraVisible, setIsCameraVisible] = useState(true);
@@ -30,15 +29,15 @@ export default function App() {
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
         );
         const foregroundServicePermission = await PermissionsAndroid.request(
-          'android.permission.FOREGROUND_SERVICE'
+          'android.permission.FOREGROUND_SERVICE' as unknown as PermissionsAndroid.Permission
         );
         const backgroundCameraPermission = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.CAMERA
         );
 
         if (
-          cameraPermission === 'authorized' &&
-          microphonePermission === 'authorized' &&
+          cameraPermission === 'granted' &&
+          microphonePermission === 'granted' &&
           storagePermission === PermissionsAndroid.RESULTS.GRANTED &&
           foregroundServicePermission === PermissionsAndroid.RESULTS.GRANTED &&
           backgroundCameraPermission === PermissionsAndroid.RESULTS.GRANTED
@@ -47,8 +46,8 @@ export default function App() {
         }
       } else {
         setHasPermission(
-          cameraPermission === 'authorized' &&
-            microphonePermission === 'authorized'
+          cameraPermission === 'granted' &&
+          microphonePermission === 'granted'
         );
       }
     };
