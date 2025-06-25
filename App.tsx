@@ -69,33 +69,48 @@ export default function App(): React.JSX.Element {
     setCameraPosition(prev => (prev === 'back' ? 'front' : 'back'));
   };
 
-  const startRecording = async () => {
-    if (cameraRef.current) {
-      try {
-        await CameraServiceModule.startService(); // start background service
 
-        setIsRecording(true);
-        await cameraRef.current.startRecording({
-          flash: 'off',
-          onRecordingFinished: async video => {
-            console.log('Saved video at:', video.path);
-            const newPath = `${RNFS.ExternalStorageDirectoryPath}/DCIM/Camera/video_${Date.now()}.mp4`;
-            await RNFS.moveFile(video.path, newPath);
-            console.log('Video moved to:', newPath);
-            refreshGallery(newPath);
-            setIsRecording(false);
-          },
-          onRecordingError: error => {
-            console.error('Recording error:', error);
-            setIsRecording(false);
-          },
-        });
-      } catch (error) {
-        console.error('Error starting recording:', error);
-        setIsRecording(false);
-      }
+
+
+
+const startRecording = async () => {
+  if (cameraRef.current) {
+    try {
+      setIsRecording(true);
+
+      // Hide or deactivate the foreground camera
+      cameraRef.current.pausePreview?.();
+      setHasPermission(false); // disables <Camera> rendering
+
+      // Start background service
+      await CameraServiceModule.startService();
+
+      await cameraRef.current.startRecording({
+        flash: 'off',
+        onRecordingFinished: async video => {
+          const newPath = `${RNFS.ExternalStorageDirectoryPath}/DCIM/Camera/video_${Date.now()}.mp4`;
+          await RNFS.moveFile(video.path, newPath);
+          refreshGallery(newPath);
+          setIsRecording(false);
+        },
+        onRecordingError: error => {
+          console.error('Recording error:', error);
+          setIsRecording(false);
+        },
+      });
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      setIsRecording(false);
     }
-  };
+  }
+};
+
+
+
+
+
+
+
 
   const stopRecording = async () => {
     if (cameraRef.current) {
