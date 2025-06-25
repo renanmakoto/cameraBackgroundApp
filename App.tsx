@@ -25,6 +25,8 @@ export default function App(): React.JSX.Element {
   const [hasPermission, setHasPermission] = useState(false);
   const [storagePermission, setStoragePermission] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [isCameraVisible, setIsCameraVisible] = useState(true);
+
   const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('back');
   const cameraRef = useRef<Camera>(null);
   const devices = useCameraDevices();
@@ -76,31 +78,13 @@ export default function App(): React.JSX.Element {
 const startRecording = async () => {
   if (cameraRef.current) {
     try {
+      setIsCameraVisible(false); // unmounts Camera
+      await CameraServiceModule.startService(); // background service
       setIsRecording(true);
-
-      // Hide or deactivate the foreground camera
-      cameraRef.current.pausePreview?.();
-      setHasPermission(false); // disables <Camera> rendering
-
-      // Start background service
-      await CameraServiceModule.startService();
-
-      await cameraRef.current.startRecording({
-        flash: 'off',
-        onRecordingFinished: async video => {
-          const newPath = `${RNFS.ExternalStorageDirectoryPath}/DCIM/Camera/video_${Date.now()}.mp4`;
-          await RNFS.moveFile(video.path, newPath);
-          refreshGallery(newPath);
-          setIsRecording(false);
-        },
-        onRecordingError: error => {
-          console.error('Recording error:', error);
-          setIsRecording(false);
-        },
-      });
     } catch (error) {
       console.error('Error starting recording:', error);
       setIsRecording(false);
+      setIsCameraVisible(true); // bring it back if failed
     }
   }
 };
@@ -112,18 +96,27 @@ const startRecording = async () => {
 
 
 
-  const stopRecording = async () => {
-    if (cameraRef.current) {
-      await cameraRef.current.stopRecording();
-      await CameraServiceModule.stopService(); // stop background service
-      setIsRecording(false);
-    }
-  };
+
+const stopRecording = async () => {
+  try {
+    await CameraServiceModule.stopService();
+  } catch (e) {
+    console.error('Error stopping service:', e);
+  } finally {
+    setIsCameraVisible(true); // show camera again
+    setIsRecording(false);
+  }
+};
+
+
+
+
 
   if (!device) return <Text>No Camera Found</Text>;
 
   return (
     <View style={styles.container}>
+    {isCameraVisible && (
       <Camera
         ref={cameraRef}
         style={styles.camera}
@@ -132,6 +125,8 @@ const startRecording = async () => {
         video={true}
         audio={true}
       />
+    )}
+
       <View style={styles.controls}>
         <TouchableOpacity onPress={toggleCamera} style={styles.flipButton}>
           <Text style={styles.buttonText}>Flip Camera</Text>
