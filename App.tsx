@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -8,107 +8,105 @@ import {
   TouchableOpacity,
   AppState,
   NativeModules,
-} from 'react-native'
-import { Camera, useCameraDevices, CameraPermissionRequestResult } from 'react-native-vision-camera'
-import RNFS from 'react-native-fs'
+} from 'react-native';
+import { Camera, useCameraDevices, CameraPermissionRequestResult } from 'react-native-vision-camera';
+import RNFS from 'react-native-fs';
 
-const { RNFetchBlob, CameraServiceModule } = NativeModules
+const { RNFetchBlob, CameraServiceModule } = NativeModules;
 
 const refreshGallery = (filePath: string) => {
   RNFetchBlob.fs
     .scanFile([{ path: filePath, mime: 'video/mp4' }])
     .then(() => console.log('Gallery refreshed:', filePath))
-    .catch((err: unknown) => console.error('Error refreshing gallery:', err))
-}
+    .catch((err: unknown) => console.error('Error refreshing gallery:', err));
+};
 
 export default function App(): React.JSX.Element {
-  const [hasPermission, setHasPermission] = useState(false)
-  const [storagePermission, setStoragePermission] = useState(false)
-  const [isRecording, setIsRecording] = useState(false)
-  const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('back')
-  const cameraRef = useRef<Camera>(null)
-  const devices = useCameraDevices()
-  const device = devices.find(d => d.position === cameraPosition)
+  const [hasPermission, setHasPermission] = useState(false);
+  const [storagePermission, setStoragePermission] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('back');
+  const cameraRef = useRef<Camera>(null);
+  const devices = useCameraDevices();
+  const device = devices.find(d => d.position === cameraPosition);
 
   useEffect(() => {
     const requestPermissions = async () => {
       if (Platform.OS === 'android') {
-        const cameraGranted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA
-        )
-        const storageGranted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-        )
-        const audioGranted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
-        )
+        const cameraGranted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
+        const storageGranted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+        const audioGranted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
+        const foregroundServiceGranted = await PermissionsAndroid.request(
+  'android.permission.FOREGROUND_SERVICE' as PermissionsAndroid.Permission
+);
 
-        setHasPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED)
-        setStoragePermission(storageGranted === PermissionsAndroid.RESULTS.GRANTED)
+
+        setHasPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED &&
+          audioGranted === PermissionsAndroid.RESULTS.GRANTED &&
+          foregroundServiceGranted === PermissionsAndroid.RESULTS.GRANTED);
+        setStoragePermission(storageGranted === PermissionsAndroid.RESULTS.GRANTED);
       } else {
-        const permission: CameraPermissionRequestResult = await Camera.requestCameraPermission()
-        setHasPermission(permission === 'granted')
+        const permission: CameraPermissionRequestResult = await Camera.requestCameraPermission();
+        setHasPermission(permission === 'granted');
       }
-    }
+    };
 
-    requestPermissions()
-  }, [])
+    requestPermissions();
+  }, []);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', state => {
       if (state === 'active') {
         Camera.requestCameraPermission().then((permission: CameraPermissionRequestResult) => {
-          setHasPermission(permission === 'granted')
-        })
+          setHasPermission(permission === 'granted');
+        });
       }
-    })
+    });
 
-    return () => subscription.remove()
-  }, [])
+    return () => subscription.remove();
+  }, []);
 
   const toggleCamera = () => {
-    setCameraPosition(prev => (prev === 'back' ? 'front' : 'back'))
-  }
+    setCameraPosition(prev => (prev === 'back' ? 'front' : 'back'));
+  };
 
   const startRecording = async () => {
     if (cameraRef.current) {
       try {
-        CameraServiceModule.startService()
+        await CameraServiceModule.startService(); // start background service
 
-        setIsRecording(true)
+        setIsRecording(true);
         await cameraRef.current.startRecording({
           flash: 'off',
           onRecordingFinished: async video => {
-            console.log('Saved video at:', video.path)
-
-            const newPath = `${RNFS.ExternalStorageDirectoryPath}/DCIM/Camera/video_${Date.now()}.mp4`
-            await RNFS.moveFile(video.path, newPath)
-            console.log('Video moved to:', newPath)
-
-            refreshGallery(newPath)
-
-            setIsRecording(false)
+            console.log('Saved video at:', video.path);
+            const newPath = `${RNFS.ExternalStorageDirectoryPath}/DCIM/Camera/video_${Date.now()}.mp4`;
+            await RNFS.moveFile(video.path, newPath);
+            console.log('Video moved to:', newPath);
+            refreshGallery(newPath);
+            setIsRecording(false);
           },
           onRecordingError: error => {
-            console.error('Recording error:', error)
-            setIsRecording(false)
+            console.error('Recording error:', error);
+            setIsRecording(false);
           },
-        })
+        });
       } catch (error) {
-        console.error('Error starting recording:', error)
-        setIsRecording(false)
+        console.error('Error starting recording:', error);
+        setIsRecording(false);
       }
     }
-  }
+  };
 
   const stopRecording = async () => {
     if (cameraRef.current) {
-      await cameraRef.current.stopRecording()
-      setIsRecording(false)
+      await cameraRef.current.stopRecording();
+      await CameraServiceModule.stopService(); // stop background service
+      setIsRecording(false);
     }
-  }
+  };
 
-  if (!device) return <Text>No Camera Found</Text>
+  if (!device) return <Text>No Camera Found</Text>;
 
   return (
     <View style={styles.container}>
@@ -132,7 +130,7 @@ export default function App(): React.JSX.Element {
         </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -167,4 +165,4 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-})
+});
