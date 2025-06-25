@@ -74,18 +74,18 @@ export default function App(): React.JSX.Element {
 
 
 
-const stopRecording = async () => {
-  try {
-    if (CameraServiceModule?.stopService) {
-      await CameraServiceModule.stopService();
-    } else {
-      console.warn('stopService not implemented in CameraServiceModule');
+
+const startRecording = async () => {
+  if (cameraRef.current) {
+    try {
+      setIsCameraVisible(false); // unmounts Camera
+      await CameraServiceModule.startService(); // background service
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      setIsRecording(false);
+      setIsCameraVisible(true); // bring it back if failed
     }
-  } catch (e) {
-    console.error('Error stopping service:', e);
-  } finally {
-    setIsCameraVisible(true); // show camera again
-    setIsRecording(false);
   }
 };
 
@@ -96,10 +96,13 @@ const stopRecording = async () => {
 
 
 
-
 const stopRecording = async () => {
   try {
-    await CameraServiceModule.stopService();
+    if (CameraServiceModule?.stopService) {
+      await CameraServiceModule.stopService();
+    } else {
+      console.warn('stopService not implemented in CameraServiceModule');
+    }
   } catch (e) {
     console.error('Error stopping service:', e);
   } finally {
