@@ -37,9 +37,8 @@ export default function App(): React.JSX.Element {
         const storageGranted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
         const audioGranted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
         const foregroundServiceGranted = await PermissionsAndroid.request(
-  'android.permission.FOREGROUND_SERVICE' as PermissionsAndroid.Permission
-);
-
+          'android.permission.FOREGROUND_SERVICE' as any
+        );
 
         setHasPermission(cameraGranted === PermissionsAndroid.RESULTS.GRANTED &&
           audioGranted === PermissionsAndroid.RESULTS.GRANTED &&
