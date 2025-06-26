@@ -5,8 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.hardware.camera2.*
 import android.media.MediaRecorder
-import android.os.*
+import android.os.Build
+import android.os.Environment
+import android.os.IBinder
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import java.io.File
 import java.text.SimpleDateFormat
@@ -17,23 +20,14 @@ class ForegroundCameraService : Service() {
     private var cameraDevice: CameraDevice? = null
     private var mediaRecorder: MediaRecorder? = null
     private var cameraSession: CameraCaptureSession? = null
-    private var cameraId: String = "0"
-    private lateinit var handlerThread: HandlerThread
-    private lateinit var cameraHandler: Handler
+    private var cameraId: String = "0" // Default to back camera
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
         startForegroundService()
-        handlerThread = HandlerThread("CameraBackgroundThread")
-        handlerThread.start()
-        cameraHandler = Handler(handlerThread.looper)
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         openCamera()
-        return START_STICKY
     }
 
     private fun startForegroundService() {
@@ -41,12 +35,7 @@ class ForegroundCameraService : Service() {
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Camera Service Channel",
-                NotificationManager.IMPORTANCE_LOW
-            )
-            manager.createNotificationChannel(channel)
+            createNotificationChannel(manager, channelId)
         }
 
         val notification = NotificationCompat.Builder(this, channelId)
@@ -58,30 +47,43 @@ class ForegroundCameraService : Service() {
         startForeground(1, notification)
     }
 
-    private fun openCamera() {
-        try {
-            val manager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-            cameraId = manager.cameraIdList[0]
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(manager: NotificationManager, channelId: String) {
+        val channel = NotificationChannel(
+            channelId,
+            "Camera Service Channel",
+            NotificationManager.IMPORTANCE_LOW
+        )
+        manager.createNotificationChannel(channel)
+    }
 
+    private fun openCamera() {
+        val manager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        try {
+            cameraId = manager.cameraIdList[0] // back camera
             val stateCallback = object : CameraDevice.StateCallback() {
                 override fun onOpened(device: CameraDevice) {
+                    Log.d("CameraService", "Camera opened successfully")
                     cameraDevice = device
                     startRecording()
                 }
 
                 override fun onDisconnected(device: CameraDevice) {
+                    Log.e("CameraService", "Camera disconnected")
                     device.close()
                 }
 
                 override fun onError(device: CameraDevice, error: Int) {
-                    device.close()
                     Log.e("CameraService", "Camera error: $error")
+                    device.close()
                 }
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                manager.openCamera(cameraId, stateCallback, cameraHandler)
+                manager.openCamera(cameraId, stateCallback, null)
             }
+        } catch (e: SecurityException) {
+            Log.e("CameraService", "Missing permission: ${e.message}")
         } catch (e: Exception) {
             Log.e("CameraService", "Failed to open camera: ${e.message}")
         }
@@ -90,8 +92,15 @@ class ForegroundCameraService : Service() {
     private fun startRecording() {
         try {
             val outputDir = getExternalFilesDir(Environment.DIRECTORY_DCIM)
+            if (outputDir == null) {
+                Log.e("CameraService", "Output directory not available")
+                return
+            }
+
             val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
             val videoFile = File(outputDir, "VID_$timeStamp.mp4")
+
+            Log.d("CameraService", "Output file: ${videoFile.absolutePath}")
 
             mediaRecorder = MediaRecorder().apply {
                 setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -107,7 +116,7 @@ class ForegroundCameraService : Service() {
             }
 
             val surface = mediaRecorder!!.surface
-            val requestBuilder = cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_RECORD).apply {
+            val captureRequestBuilder = cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_RECORD).apply {
                 addTarget(surface)
             }
 
@@ -116,16 +125,16 @@ class ForegroundCameraService : Service() {
                 object : CameraCaptureSession.StateCallback() {
                     override fun onConfigured(session: CameraCaptureSession) {
                         cameraSession = session
-                        session.setRepeatingRequest(requestBuilder.build(), null, cameraHandler)
+                        session.setRepeatingRequest(captureRequestBuilder.build(), null, null)
                         mediaRecorder?.start()
                         Log.d("CameraService", "Recording started")
                     }
 
                     override fun onConfigureFailed(session: CameraCaptureSession) {
-                        Log.e("CameraService", "Session config failed")
+                        Log.e("CameraService", "Capture session failed")
                     }
                 },
-                cameraHandler
+                null
             )
 
         } catch (e: Exception) {
@@ -136,7 +145,6 @@ class ForegroundCameraService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         stopRecording()
-        handlerThread.quitSafely()
     }
 
     private fun stopRecording() {
@@ -148,7 +156,7 @@ class ForegroundCameraService : Service() {
                 reset()
                 release()
             }
-            Log.d("CameraService", "Recording stopped and resources released")
+            Log.d("CameraService", "Recording stopped and camera released")
         } catch (e: Exception) {
             Log.e("CameraService", "Failed to stop recording: ${e.message}")
         }
