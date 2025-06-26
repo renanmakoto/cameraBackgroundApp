@@ -12,10 +12,14 @@ class CameraServiceModule(reactContext: ReactApplicationContext) : ReactContextB
     override fun getName(): String = "CameraServiceModule"
 
     @ReactMethod
-    fun stopService() {
-        val context = reactApplicationContext
-        val intent = Intent(context, CameraService::class.java)
-        context.stopService(intent)
+    fun startService() {
+        val intent = Intent(context, ForegroundCameraService::class.java)
+        context.startService(intent)
     }
 
+    @ReactMethod
+    fun stopService() {
+        val intent = Intent(context, ForegroundCameraService::class.java)
+        context.stopService(intent)
+    }
 }
