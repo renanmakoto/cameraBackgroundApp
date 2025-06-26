@@ -14,7 +14,7 @@ class CameraServiceModule(reactContext: ReactApplicationContext) : ReactContextB
     @ReactMethod
     fun startService() {
         val intent = Intent(context, ForegroundCameraService::class.java)
-        context.startService(intent)
+        context.startForegroundService(intent)
     }
 
     @ReactMethod
