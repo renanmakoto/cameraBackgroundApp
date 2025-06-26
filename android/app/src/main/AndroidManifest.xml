@@ -34,10 +34,11 @@
 
         <!-- Background Camera Service -->
         <service
-            android:name=".CameraService"
+            android:name=".ForegroundCameraService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="camera|microphone" />
+
 
     </application>
 
