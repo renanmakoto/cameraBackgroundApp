@@ -20,14 +20,18 @@ class ForegroundCameraService : Service() {
     private var cameraDevice: CameraDevice? = null
     private var mediaRecorder: MediaRecorder? = null
     private var cameraSession: CameraCaptureSession? = null
-    private var cameraId: String = "0" // Default to back camera
+    private var cameraId: String = "0"
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
         startForegroundService()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         openCamera()
+        return START_STICKY
     }
 
     private fun startForegroundService() {
@@ -60,7 +64,7 @@ class ForegroundCameraService : Service() {
     private fun openCamera() {
         val manager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
         try {
-            cameraId = manager.cameraIdList[0] // back camera
+            cameraId = manager.cameraIdList[0]
             val stateCallback = object : CameraDevice.StateCallback() {
                 override fun onOpened(device: CameraDevice) {
                     Log.d("CameraService", "Camera opened successfully")
@@ -91,7 +95,7 @@ class ForegroundCameraService : Service() {
 
     private fun startRecording() {
         try {
-            val outputDir = getExternalFilesDir(Environment.DIRECTORY_DCIM)
+            val outputDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES)
             if (outputDir == null) {
                 Log.e("CameraService", "Output directory not available")
                 return
