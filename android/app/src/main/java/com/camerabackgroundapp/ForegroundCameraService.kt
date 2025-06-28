@@ -21,6 +21,7 @@ class ForegroundCameraService : Service() {
     private var mediaRecorder: MediaRecorder? = null
     private var cameraSession: CameraCaptureSession? = null
     private var cameraId: String = "0"
+    private var intentReference: Intent? = null
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -28,7 +29,12 @@ class ForegroundCameraService : Service() {
         super.onCreate()
         Log.d("CameraService", "Service created")
         startForegroundService()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        this.intentReference = intent
         openCamera()
+        return START_STICKY
     }
 
     private fun startForegroundService() {
@@ -63,8 +69,16 @@ class ForegroundCameraService : Service() {
     private fun openCamera() {
         val manager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
         try {
-            cameraId = manager.cameraIdList[0]
+            val requestedPosition = intentReference?.getStringExtra("cameraPosition") ?: "back"
+            cameraId = manager.cameraIdList.firstOrNull { id ->
+                val characteristics = manager.getCameraCharacteristics(id)
+                val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
+                (requestedPosition == "front" && facing == CameraCharacteristics.LENS_FACING_FRONT) ||
+                (requestedPosition == "back" && facing == CameraCharacteristics.LENS_FACING_BACK)
+            } ?: manager.cameraIdList[0]
+
             Log.d("CameraService", "Opening camera with ID: $cameraId")
+
             val stateCallback = object : CameraDevice.StateCallback() {
                 override fun onOpened(device: CameraDevice) {
                     Log.d("CameraService", "Camera opened")
@@ -86,6 +100,7 @@ class ForegroundCameraService : Service() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 manager.openCamera(cameraId, stateCallback, null)
             }
+
         } catch (e: SecurityException) {
             Log.e("CameraService", "Permission error: ${e.message}")
         } catch (e: Exception) {
@@ -95,9 +110,10 @@ class ForegroundCameraService : Service() {
 
     private fun startRecording() {
         try {
-            val outputDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/Camera")
-            if (!outputDir.exists()) {
-                outputDir.mkdirs()
+            val outputDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+            if (outputDir == null) {
+                Log.e("CameraService", "Output directory is null")
+                return
             }
 
             val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
