@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.hardware.camera2.*
 import android.media.MediaRecorder
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.IBinder
@@ -96,10 +95,9 @@ class ForegroundCameraService : Service() {
 
     private fun startRecording() {
         try {
-            val outputDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES)
-            if (outputDir == null) {
-                Log.e("CameraService", "Output directory is null")
-                return
+            val outputDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/Camera")
+            if (!outputDir.exists()) {
+                outputDir.mkdirs()
             }
 
             val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
@@ -133,12 +131,6 @@ class ForegroundCameraService : Service() {
                         session.setRepeatingRequest(captureRequestBuilder.build(), null, null)
                         mediaRecorder?.start()
                         Log.d("CameraService", "Recording started")
-
-                        // Trigger media scanner
-                        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-                        mediaScanIntent.data = Uri.fromFile(videoFile)
-                        sendBroadcast(mediaScanIntent)
-                        Log.d("CameraService", "Media scan broadcast sent")
                     }
 
                     override fun onConfigureFailed(session: CameraCaptureSession) {
