@@ -11,6 +11,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import android.media.MediaScannerConnection
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,6 +23,7 @@ class ForegroundCameraService : Service() {
     private var cameraSession: CameraCaptureSession? = null
     private var cameraId: String = "0"
     private var intentReference: Intent? = null
+    private var currentVideoPath: String? = null
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -74,7 +76,7 @@ class ForegroundCameraService : Service() {
                 val characteristics = manager.getCameraCharacteristics(id)
                 val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
                 (requestedPosition == "front" && facing == CameraCharacteristics.LENS_FACING_FRONT) ||
-                (requestedPosition == "back" && facing == CameraCharacteristics.LENS_FACING_BACK)
+                        (requestedPosition == "back" && facing == CameraCharacteristics.LENS_FACING_BACK)
             } ?: manager.cameraIdList[0]
 
             Log.d("CameraService", "Opening camera with ID: $cameraId")
@@ -110,18 +112,18 @@ class ForegroundCameraService : Service() {
 
     private fun startRecording() {
         try {
-            val outputDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES)
-            if (outputDir == null) {
-                Log.e("CameraService", "Output directory is null")
-                return
+            val dcimDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera")
+            if (!dcimDir.exists()) {
+                dcimDir.mkdirs()
             }
 
             val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-            val videoFile = File(outputDir, "VID_$timeStamp.mp4")
+            val videoFile = File(dcimDir, "VID_$timeStamp.mp4")
+            currentVideoPath = videoFile.absolutePath
             Log.d("CameraService", "Recording to: ${videoFile.absolutePath}")
 
             mediaRecorder = MediaRecorder().apply {
-                setAudioSource(MediaRecorder.AudioSource.CAMCORDER) // improved audio
+                setAudioSource(MediaRecorder.AudioSource.MIC)
                 setVideoSource(MediaRecorder.VideoSource.SURFACE)
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                 setOutputFile(videoFile.absolutePath)
@@ -130,11 +132,6 @@ class ForegroundCameraService : Service() {
                 setVideoEncodingBitRate(10000000)
                 setVideoFrameRate(30)
                 setVideoSize(1280, 720)
-
-                // Audio improvements
-                setAudioEncodingBitRate(128000)
-                setAudioSamplingRate(44100)
-
                 prepare()
             }
 
@@ -180,6 +177,10 @@ class ForegroundCameraService : Service() {
                 stop()
                 reset()
                 release()
+            }
+            currentVideoPath?.let { path ->
+                MediaScannerConnection.scanFile(this, arrayOf(path), arrayOf("video/mp4"), null)
+                Log.d("CameraService", "MediaScanner triggered for: $path")
             }
             Log.d("CameraService", "Recording stopped and resources released")
         } catch (e: Exception) {
