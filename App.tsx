@@ -119,7 +119,7 @@ const stopRecording = async () => {
 
   return (
     <View style={styles.container}>
-    {isCameraVisible && (
+    {/*isCameraVisible && (
       <Camera
         ref={cameraRef}
         style={styles.camera}
@@ -128,7 +128,7 @@ const stopRecording = async () => {
         video={true}
         audio={true}
       />
-    )}
+    )*/}
 
       <View style={styles.controls}>
         <TouchableOpacity onPress={toggleCamera} style={styles.flipButton}>
