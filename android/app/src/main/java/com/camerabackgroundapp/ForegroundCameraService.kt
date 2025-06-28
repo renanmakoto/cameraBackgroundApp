@@ -110,14 +110,14 @@ class ForegroundCameraService : Service() {
 
     private fun startRecording() {
         try {
-            val outputDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES)
-            if (outputDir == null) {
-                Log.e("CameraService", "Output directory is null")
-                return
+            val dcimDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val cameraDir = File(dcimDir, "Camera")
+            if (!cameraDir.exists()) {
+                cameraDir.mkdirs()
             }
 
             val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-            val videoFile = File(outputDir, "VID_$timeStamp.mp4")
+            val videoFile = File(cameraDir, "VID_$timeStamp.mp4")
             Log.d("CameraService", "Recording to: ${videoFile.absolutePath}")
 
             mediaRecorder = MediaRecorder().apply {
