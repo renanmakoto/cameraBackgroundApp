@@ -15,6 +15,7 @@ const { CameraServiceModule } = NativeModules;
 export default function App(): React.JSX.Element {
   const [hasPermission, setHasPermission] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('back');
 
   useEffect(() => {
     const requestPermissions = async () => {
@@ -50,9 +51,14 @@ export default function App(): React.JSX.Element {
     return () => subscription.remove();
   }, []);
 
+  const toggleCamera = () => {
+    const newCamera = cameraPosition === 'back' ? 'front' : 'back';
+    setCameraPosition(newCamera);
+  };
+
   const startRecording = async () => {
     try {
-      await CameraServiceModule.startService();
+      await CameraServiceModule.startService(cameraPosition); // pass camera position
       setIsRecording(true);
     } catch (error) {
       console.error('Error starting recording:', error);
@@ -75,6 +81,9 @@ export default function App(): React.JSX.Element {
   return (
     <View style={styles.container}>
       <View style={styles.controls}>
+        <TouchableOpacity onPress={toggleCamera} style={styles.flipButton}>
+          <Text style={styles.buttonText}>Flip Camera ({cameraPosition})</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={isRecording ? stopRecording : startRecording}
           style={isRecording ? styles.stopButton : styles.startButton}
@@ -94,6 +103,13 @@ const styles = StyleSheet.create({
   },
   controls: {
     padding: 20,
+  },
+  flipButton: {
+    marginBottom: 10,
+    padding: 12,
+    backgroundColor: 'blue',
+    borderRadius: 8,
+    alignItems: 'center',
   },
   startButton: {
     padding: 15,
