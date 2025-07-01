@@ -4,7 +4,7 @@
 0	4	0	/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/RelWithDebInfo/4xq5z6u1/x86/CMakeFiles/cmake.verify_globs	fdeb4eaf92b56dbe
 0	4484	1750430254936149736	CMakeFiles/appmodules.dir/home/user/Desktop/cameraBackgroundApp/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	236d20d66b3ea0af
 2	4202	1750430254656145215	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/Props.cpp.o	11e2e5e6986816d2
-4	31	1750940744026913917	build.ninja	13a2d365fa6093ca
+4	33	1751377025741201761	build.ninja	13a2d365fa6093ca
 4897	4933	1750430255413157436	/home/user/Desktop/cameraBackgroundApp/android/app/build/intermediates/cxx/RelWithDebInfo/4xq5z6u1/obj/x86/libappmodules.so	775885728a5d8686
 3	4724	1750430255184153739	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/rnviewshotJSI-generated.cpp.o	eba8d12808792557
 1	4158	1750430254614144537	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/ComponentDescriptors.cpp.o	9ac029cb6eadd657
@@ -12,6 +12,14 @@
 2	4058	1750430254511142874	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/ShadowNodes.cpp.o	ab9d45c2ad741c3
 0	3	0	clean	6f7710e0c0213ff3
 1	3122	1750430253579127825	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/EventEmitters.cpp.o	6147e5ecaea66788
-4	33	1750940744026913917	build.ninja	13a2d365fa6093ca
-0	4	0	/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/RelWithDebInfo/4xq5z6u1/x86/CMakeFiles/cmake.verify_globs	fdeb4eaf92b56dbe
-0	3	0	clean	6f7710e0c0213ff3
+0	5	0	/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/RelWithDebInfo/4xq5z6u1/x86/CMakeFiles/cmake.verify_globs	fdeb4eaf92b56dbe
+9	3395	1751377029154220787	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/States.cpp.o	dff8f21d437097ea
+8	3728	1751377029492222674	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/EventEmitters.cpp.o	6147e5ecaea66788
+8	4292	1751377030045225762	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/Props.cpp.o	11e2e5e6986816d2
+7	4581	1751377030331227361	CMakeFiles/appmodules.dir/home/user/Desktop/cameraBackgroundApp/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	236d20d66b3ea0af
+8	4631	1751377030386227668	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/ComponentDescriptors.cpp.o	9ac029cb6eadd657
+9	4654	1751377030412227813	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/rnviewshotJSI-generated.cpp.o	eba8d12808792557
+9	4672	1751377030436227947	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/ShadowNodes.cpp.o	ab9d45c2ad741c3
+10	4805	1751377030563228657	rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/rnviewshot-generated.cpp.o	31dbbfd849a123a7
+7	5239	1751377030994231066	CMakeFiles/appmodules.dir/OnLoad.cpp.o	8b96e37aeb77520f
+5239	5289	1751377031071231496	/home/user/Desktop/cameraBackgroundApp/android/app/build/intermediates/cxx/RelWithDebInfo/4xq5z6u1/obj/x86/libappmodules.so	775885728a5d8686
