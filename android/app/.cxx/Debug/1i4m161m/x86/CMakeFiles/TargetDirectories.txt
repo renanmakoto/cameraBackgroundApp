@@ -1,6 +1,0 @@
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/Debug/1i4m161m/x86/CMakeFiles/appmodules.dir
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/Debug/1i4m161m/x86/CMakeFiles/edit_cache.dir
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/Debug/1i4m161m/x86/CMakeFiles/rebuild_cache.dir
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/Debug/1i4m161m/x86/rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/Debug/1i4m161m/x86/rnviewshot_autolinked_build/CMakeFiles/edit_cache.dir
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/Debug/1i4m161m/x86/rnviewshot_autolinked_build/CMakeFiles/rebuild_cache.dir

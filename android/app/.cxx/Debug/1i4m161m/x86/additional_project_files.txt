@@ -1,7 +1,0 @@
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/Debug/1i4m161m/x86/rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/ComponentDescriptors.cpp.o
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/Debug/1i4m161m/x86/rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/EventEmitters.cpp.o
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/Debug/1i4m161m/x86/rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/Props.cpp.o
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/Debug/1i4m161m/x86/rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/ShadowNodes.cpp.o
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/Debug/1i4m161m/x86/rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/States.cpp.o
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/Debug/1i4m161m/x86/rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/react/renderer/components/rnviewshot/rnviewshotJSI-generated.cpp.o
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/Debug/1i4m161m/x86/rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir/rnviewshot-generated.cpp.o

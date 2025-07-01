@@ -1,6 +1,0 @@
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/RelWithDebInfo/4xq5z6u1/armeabi-v7a/CMakeFiles/appmodules.dir
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/RelWithDebInfo/4xq5z6u1/armeabi-v7a/CMakeFiles/edit_cache.dir
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/RelWithDebInfo/4xq5z6u1/armeabi-v7a/CMakeFiles/rebuild_cache.dir
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/RelWithDebInfo/4xq5z6u1/armeabi-v7a/rnviewshot_autolinked_build/CMakeFiles/react_codegen_rnviewshot.dir
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/RelWithDebInfo/4xq5z6u1/armeabi-v7a/rnviewshot_autolinked_build/CMakeFiles/edit_cache.dir
-/home/user/Desktop/cameraBackgroundApp/android/app/.cxx/RelWithDebInfo/4xq5z6u1/armeabi-v7a/rnviewshot_autolinked_build/CMakeFiles/rebuild_cache.dir
