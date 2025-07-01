@@ -8,7 +8,6 @@ import android.media.MediaRecorder
 import android.os.Build
 import android.os.Environment
 import android.os.IBinder
-import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -75,7 +74,7 @@ class ForegroundCameraService : Service() {
                 val characteristics = manager.getCameraCharacteristics(id)
                 val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
                 (requestedPosition == "front" && facing == CameraCharacteristics.LENS_FACING_FRONT) ||
-                (requestedPosition == "back" && facing == CameraCharacteristics.LENS_FACING_BACK)
+                        (requestedPosition == "back" && facing == CameraCharacteristics.LENS_FACING_BACK)
             } ?: manager.cameraIdList[0]
 
             Log.d("CameraService", "Opening camera with ID: $cameraId")
@@ -111,27 +110,34 @@ class ForegroundCameraService : Service() {
 
     private fun startRecording() {
         try {
+            val dcimDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val cameraDir = File(dcimDir, "Camera")
+            if (!cameraDir.exists()) cameraDir.mkdirs()
+
             val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-            val fileName = "VID_$timeStamp.mp4"
-            val filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath +
-                "/Camera/$fileName"
-
-            val videoFile = File(filePath)
-            videoFile.parentFile?.mkdirs()
-
+            val videoFile = File(cameraDir, "VID_$timeStamp.mp4")
             Log.d("CameraService", "Recording to: ${videoFile.absolutePath}")
 
             mediaRecorder = MediaRecorder().apply {
-                setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    setAudioSource(MediaRecorder.AudioSource.UNPROCESSED) // if supported
+                } else {
+                    setAudioSource(MediaRecorder.AudioSource.MIC)
+                }
                 setVideoSource(MediaRecorder.VideoSource.SURFACE)
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                 setOutputFile(videoFile.absolutePath)
                 setVideoEncoder(MediaRecorder.VideoEncoder.H264)
                 setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-                setAudioEncodingBitRate(128000)
+
+                // Enhanced audio quality
+                setAudioEncodingBitRate(192000)
+                setAudioSamplingRate(48000)
+
                 setVideoEncodingBitRate(10000000)
                 setVideoFrameRate(30)
                 setVideoSize(1280, 720)
+
                 prepare()
             }
 
