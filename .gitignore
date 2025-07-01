@@ -43,6 +43,7 @@ build/
 android/.gradle/
 android/.idea/
 android/.cxx/
+android/app/.cxx/
 android/app/build/
 ios/Pods/
 ios/build/
